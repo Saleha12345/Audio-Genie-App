@@ -3,9 +3,6 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-
-
-
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
@@ -13,12 +10,11 @@ app.use(bodyParser.json());
 async function dbConnect() {
   // use mongoose to connect this app to our database on mongoDB using the DB_URL (connection string)
   mongoose
-    .connect('mongodb+srv://saleha:saleha1234@cluster0.cftc4dy.mongodb.net/AudioGenie?retryWrites=true&w=majority',
+    .connect('mongodb+srv://saleha:saleha1234@cluster0.cftc4dy.mongodb.net/AudioGenie?retryWrites=true&w=majority&appName=Cluster0',
     
       {
         useNewUrlParser: true,
         useUnifiedTopology: true,
-        
 
       }
     )
@@ -58,23 +54,20 @@ async function dbConnect() {
   // Login endpoint
   app.post('/login', async (req, res) => {
     try {
-      console.log('Login endpoint hit');
+      console.log("I am here");
       const { email, password } = req.body;
-      console.log('Login request:', req.body);
+      console.log(req.body);
       const user = await User.findOne({ email });
       if (!user) {
-        console.log('User not found:', email);
         return res.status(404).json({ message: 'User not found' });
       }
       if (password === user.password) {
         if (user.status === 'suspended') {
-          console.log('User suspended:', email);
           return res.status(403).json({ message: 'Your account is suspended. Please contact support for assistance.' });
         }
-        console.log('Login successful:', user);
+        console.log("blallal")
         return res.status(200).json({ message: 'Login successful', userData: user });
       } else {
-        console.log('Invalid email or password:', email);
         return res.status(401).json({ message: 'Invalid email or password' });
       }
     } catch (error) {
@@ -82,7 +75,6 @@ async function dbConnect() {
       return res.status(500).json({ message: 'Error logging in' });
     }
   });
-  
 
   
   app.post('/update', async (req, res) => {
@@ -159,6 +151,63 @@ app.post('/submit-feedback', async (req, res) => {
     console.error('Error submitting feedback:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
+});
+
+
+app.post('/getsubscription', async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const subscription = await User.findOne({ email });
+    console.log("here is",subscription.plan);
+
+    if (subscription) {
+      res.status(200).json(subscription.plan);
+    } else {
+      res.status(404).json({ message: 'Subscription not found for the provided email' });
+    }
+  } catch (error) {
+    console.error('Error fetching current subscription:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+app.post('/update-plan', async (req, res) => {
+const { email, newPlan } = req.body;
+
+try {
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    return res.status(404).json({ error: 'User not found' });
+  }
+
+  user.plan = newPlan;
+  await user.save();
+
+  return res.status(200).json({ message: 'Plan updated successfully', user });
+} catch (error) {
+  console.error('Error updating plan:', error);
+  return res.status(500).json({ error: 'Internal server error' });
+}
+});
+
+app.post('/cancel-subscription', async (req, res) => {
+const { email } = req.body;
+
+try {
+  const user = await User.findOneAndUpdate({ email }, { plan: 'None' }, { new: true });
+
+  if (user) {
+    res.status(200).json({ message: 'Subscription canceled successfully' });
+  } else {
+    res.status(404).json({ error: 'User not found' });
+  }
+} catch (error) {
+  console.error('Error canceling subscription:', error);
+  res.status(500).json({ error: 'Internal server error' });
+}
 });
 
 app.get('/users', async (req, res) => {
