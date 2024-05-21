@@ -78,7 +78,9 @@ const AdminDashboard = () => {
     setStandardCount(standard);
     setPremiumCount(premium);
     setSubscriptionData([basic, standard, premium]);
+    
   };
+  
 
   const fetchMonthlyRegistrations = async () => {
     try {
@@ -173,18 +175,18 @@ const AdminDashboard = () => {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.header}>Dashboard</Text>
+      {/* <Text style={styles.header}>Dashboard</Text> */}
       <View style={styles.cardContainer}>
         <View style={styles.card}>
-          {/* <Image source={require('./../../images/total-users.png')} style={styles.image} /> */}
+          <Image source={require('./../../images/total-users.png')} style={styles.image} />
           <Text style={styles.cardText}>{userCount} Users</Text>
         </View>
         <View style={styles.card}>
-          {/* <Image source={require('./../../images/total-sub.png')} style={styles.image} /> */}
+          <Image source={require('./../../images/total-sub.png')} style={styles.image} />
           <Text style={styles.cardText}>{userCount} Subscriptions</Text>
         </View>
         <View style={styles.card}>
-          {/* <Image source={require('./../../images/active-users.png')} style={styles.image} /> */}
+          <Image source={require('./../../images/active-users.png')} style={styles.image} />
           <Text style={styles.cardText}>{activeCount} Active</Text>
         </View>
       </View>
@@ -194,15 +196,20 @@ const AdminDashboard = () => {
           style={styles.chart}
           data={subscriptionChart}
           width={screenWidth - 40}
-          height={220}
+          height={300}
           yAxisLabel=""
           chartConfig={chartConfig}
           verticalLabelRotation={30}
+          formZero={true}
+          withCustomBarColorFromData={true}
+          flatColor={true}
+          showBarTops={false}
         />
       </View>
       <View style={styles.chartContainer}>
         <Text style={styles.chartTitle}>Countries Data</Text>
         <PieChart
+        style={styles.chart}
           data={countryChart.datasets[0].data.map((value, index) => ({
             name: countryChart.labels[index],
             population: value,
@@ -214,7 +221,7 @@ const AdminDashboard = () => {
           height={220}
           chartConfig={chartConfig}
           accessor="population"
-          backgroundColor="transparent"
+          backgroundColor="white"
           paddingLeft="15"
           absolute
         />
@@ -229,6 +236,10 @@ const AdminDashboard = () => {
           yAxisLabel=""
           chartConfig={chartConfig}
           verticalLabelRotation={30}
+          formZero={true}
+          withCustomBarColorFromData={true}
+          flatColor={true}
+          showBarTops={false}
         />
       </View>
     </ScrollView>
@@ -242,7 +253,12 @@ const chartConfig = {
   strokeWidth: 2,
   barPercentage: 0.5,
   useShadowColorFromDataset: false,
+  fillShadowGradient: '#FF493B', // THIS
+  fillShadowGradientOpacity: 1, // THIS
+  decimalPlaces: 0,
+  
 };
+
 
 const styles = StyleSheet.create({
   container: {
@@ -276,20 +292,26 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   cardText: {
-    fontSize: 16,
+    fontSize: 12,
     fontWeight: "bold",
   },
   chartContainer: {
     marginBottom: 20,
+    backgroundColor:"white", 
+    borderRadius:10,
+    
   },
   chartTitle: {
     fontSize: 18,
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: 10,
+    marginTop: 10
   },
   chart: {
     borderRadius: 10,
+    backgroundColor: "white",
+    
   },
 });
 

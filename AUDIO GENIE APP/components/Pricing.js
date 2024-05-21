@@ -35,7 +35,7 @@ const SubscriptionPage = ({ navigation }) => {
                 Audio File Uploads</Text>
           <Text style={styles.features}>- 10
                 Audio Separation Requests</Text>
-          <TouchableOpacity style={styles.button} onPress={() => handleSubscription('Basic Plan', '300')}>
+          <TouchableOpacity style={styles.button} onPress={() => handleSubscription('Basic', '300')}>
             <Text style={styles.buttonText}>Select Plan</Text>
           </TouchableOpacity>
         </View>
@@ -46,7 +46,7 @@ const SubscriptionPage = ({ navigation }) => {
           <Text style={styles.features}>- Unlimited Audio File Uploads</Text>
           <Text style={styles.features}>-  50
                 Audio Separation Requests per Month</Text>
-          <TouchableOpacity style={styles.button} onPress={() => handleSubscription('Standard Plan', '900')}>
+          <TouchableOpacity style={styles.button} onPress={() => handleSubscription('Standard', '900')}>
             <Text style={styles.buttonText}>Select Plan</Text>
           </TouchableOpacity>
         </View>
@@ -57,7 +57,7 @@ const SubscriptionPage = ({ navigation }) => {
           <Text style={styles.features}>- Unlimited Audio File Uploads</Text>
           <Text style={styles.features}>- 200 Audio Separation Requests</Text>
 
-          <TouchableOpacity style={styles.button} onPress={() => handleSubscription('Premium Plan', '3000')}>
+          <TouchableOpacity style={styles.button} onPress={() => handleSubscription('Premium', '3000')}>
             <Text style={styles.buttonText}>Select Plan</Text>
           </TouchableOpacity>
         </View>

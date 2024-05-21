@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { View, Text,TouchableOpacity,Button, ScrollView, StyleSheet,Dimensions } from 'react-native';
 import { Avatar, IconButton, Colors } from 'react-native-paper';
 import { Table, TableWrapper, Row, Rows } from 'react-native-table-component';
-
 const customColors = {
   blue: '#2196F3',
   green: '#4CAF50',
@@ -18,7 +17,7 @@ const getRandomColor = () => {
   const randomIndex = Math.floor(Math.random() * colors.length);
   return colors[randomIndex];
 };
-
+const windowWidth = Dimensions.get('window').width;
 const Users = () => {
   const [users, setUsers] = useState([]);
 
@@ -51,7 +50,7 @@ const Users = () => {
   const toggleUserStatus = async (email, currentStatus) => {
     try {
       const newStatus = currentStatus === 'active' ? 'suspended' : 'active';
-      const response = await axios.put(`http://192.168.100.23:3001/users/${email}/status/${newStatus}`);
+      const response = await axios.put(`http://10.113.70.36:3001/users/${email}/status/${newStatus}`);
       if (response.status === 200) {
         setUsers(users.map(user => user.email === email ? { ...user, status: newStatus } : user));
       }
@@ -62,26 +61,57 @@ const Users = () => {
 
   const tableHead = ['Avatar', 'Name', 'Email', 'Subscription Plan', 'Action'];
   const tableData = users.map(user => [
-    <Avatar.Text size={36} label={user.username.charAt(0)} style={{ backgroundColor: getRandomColor() }} />,
-    user.username,
-    user.email,
-    user.plan,
+    <View style={styles.avatarContainer}>
+      <Avatar.Text
+        size={40}
+        label={user.username ? user.username.charAt(0) : '?'}
+        style={{ backgroundColor: getRandomColor() }}
+      />
+    </View>,
+    user.username || 'N/A',
+    user.email || 'N/A',
+    user.plan || 'N/A',
     <View style={styles.actionContainer}>
-      <IconButton icon="delete" color={customColors.red} onPress={() => deleteUser(user.email)} />
-      <IconButton icon="block" color={user.status === 'active' ? customColors.yellow : customColors.green} onPress={() => toggleUserStatus(user.email, user.status)} />
+      <TouchableOpacity
+        style={[styles.button, { backgroundColor: customColors.red }]}
+        onPress={() => deleteUser(user.email)}
+      >
+        <Text style={styles.buttonText}>Delete</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[
+          styles.button,
+          { backgroundColor: user.status === 'active' ? customColors.yellow : customColors.green }
+        ]}
+        onPress={() => toggleUserStatus(user.email, user.status)}
+      >
+        <Text style={styles.buttonText}>
+          {user.status === 'active' ? 'Deactivate' : 'Activate'}
+        </Text>
+      </TouchableOpacity>
     </View>
   ]);
-
+  
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.header}>Users</Text>
-      <View style={styles.tableContainer}>
-        <Table borderStyle={styles.tableBorder}>
-          <Row data={tableHead} style={styles.head} textStyle={styles.text} />
-          <Rows data={tableData} textStyle={styles.text} />
-        </Table>
-      </View>
-    </ScrollView>
+    <View style={styles.container}>
+      <ScrollView horizontal={true}>
+        <View style={styles.tableContainer}>
+          <Table borderStyle={styles.tableBorder}>
+            <Row
+              data={tableHead}
+              style={styles.head}
+              textStyle={styles.headerText}
+              widthArr={[70, 140, 210, 130, 120]} // Adjust widthArr based on your content
+            />
+            <Rows
+              data={tableData}
+              textStyle={styles.text}
+              widthArr={[70, 140, 210, 130, 120]} // Adjust widthArr based on your content
+            />
+          </Table>
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 
@@ -91,12 +121,6 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#F9F5FF',
   },
-  header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center',
-  },
   tableContainer: {
     flex: 1,
     backgroundColor: '#fff',
@@ -104,21 +128,44 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   head: {
-    height: 40,
+    height: 90,
     backgroundColor: '#f1f8ff',
+  },
+  headerText: {
+    margin: 6,
+    textAlign: 'center',
+    fontWeight: 'bold',
   },
   text: {
     margin: 6,
     textAlign: 'center',
   },
-  actionContainer: {
-    flexDirection: 'row',
+  avatarContainer: {
     justifyContent: 'center',
+    alignItems: 'center',
+    height: 70,
+  },
+  actionContainer: {
+    justifyContent: 'center',
+    flexDirection: 'column',
+    alignItems: 'center', // Center align items horizontally
+    justifyContent: 'center', // Center align items vertically
   },
   tableBorder: {
     borderWidth: 1,
     borderColor: '#C1C0B9',
   },
+  button: {
+    padding: 10,
+    borderRadius: 5,
+    marginVertical: 5,
+    alignItems: 'center',
+    width: windowWidth * 0.3, // 80% of the window width
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontWeight: 'bold'
+  }
 });
 
 export default Users;

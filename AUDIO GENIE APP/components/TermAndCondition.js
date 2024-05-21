@@ -1,18 +1,80 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {View,Text,StyleSheet,ScrollView,ImageBackground,TouchableOpacity,} from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ImageBackground, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-export default function TermAndCondition() {
+import { useUser } from './UserContext';
+
+  function TermAndCondition() {
   const navigation = useNavigation();
+  const { theme, fontSize } = useUser();
+  
+
+  const getTextColor = () => (theme === 'dark' ? '#FFF' : '#000');
+  const getFontSizeValue = () => {
+    switch (fontSize) {
+      case 'small':
+        return 14;
+      case 'medium':
+        return 18;
+      case 'large':
+        return 22;
+      default:
+        return 18;
+    }
+  };
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: theme === 'dark' ? '#333' : '#FFFFFF',
+      paddingHorizontal: 20,
+    },
+    headerContainer1: {
+      width: '100%',
+      height: 270,
+      justifyContent: 'flex-end',
+      opacity: 0.8,
+    },
+    headerContainer: {
+      backgroundColor: '#ED6474',
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingHorizontal: 16,
+      paddingVertical: 8,
+      width: '100%',
+    },
+    headerText: {
+      fontSize: 20,
+      fontWeight: 'bold',
+      color: 'white',
+    },
+    title: {
+      fontSize: 24,
+      fontWeight: 'bold',
+      color: theme === 'dark' ? 'white' : 'black',
+    },
+    sectionContainer: {
+      padding: 16,
+    },
+    sectionTitle: {
+      fontSize: 24,
+      fontWeight: 'bold',
+      marginBottom: 8,
+      color: theme === 'dark' ? 'white' : 'black',
+    },
+    sectionContent: {
+      fontSize: fontSize === 'small' ? 14 : (fontSize === 'medium' ? 16 : 18),
+      marginBottom: 8,
+      color: theme === 'dark' ? 'white' : 'black',
+    },
+   
+    heading: {
+      fontWeight: 'bold',
+    },
+  });
+
   return (
     <ScrollView style={styles.container}>
-       {/* <View style={styles.headerContainer}>
-        <TouchableOpacity style={styles.backArrowContainer} onPress={() => navigation.navigate('Profile')}>
-          <Icon name="arrow-left" size={24} color="white" />
-        </TouchableOpacity>
-        <Text style={styles.headerText}>Terms and Conditions</Text>
-      </View> */}
-
       <ImageBackground
         source={require('../images/Term.jpg')}
         style={styles.headerContainer1}>
@@ -20,18 +82,16 @@ export default function TermAndCondition() {
 
       <View>
       </View>
-      
-      <View style={styles.contentContainer}>
-        
-      
+
+      {/* <View style={styles.contentContainer}>
         <Text style={styles.title}>Terms and Conditions</Text>
         <Text style={styles.content}>
-          
-Welcome to AudioGenie! Our mission is to revolutionize the way you experience audio content. These Terms and Conditions ("Terms") delineate the rules and regulations governing your utilization of the AudioGenie mobile application ("App") and the array of services it offers, all provided by AudioGenie Ltd. ("AudioGenie," "we," or "us"). By accessing and using the App, you are expressly agreeing to adhere to these Terms. We strongly urge you to peruse them meticulously prior to engaging with the App.
+          Welcome to AudioGenie! Our mission is to revolutionize the way you experience audio content. These Terms and Conditions ("Terms") delineate the rules and regulations governing your utilization of the AudioGenie mobile application ("App") and the array of services it offers, all provided by AudioGenie Ltd. ("AudioGenie," "we," or "us"). By accessing and using the App, you are expressly agreeing to adhere to these Terms. We strongly urge you to peruse them meticulously prior to engaging with the App.
         </Text>
-      </View>
+      </View> */}
 
       <View style={styles.sectionContainer}>
+        
         <Text style={styles.sectionTitle}>1. User Responsibilities</Text>
         <Text style={styles.sectionContent}>
           <Text style={styles.heading}>1.1. Eligibility:</Text> By using the
@@ -41,14 +101,8 @@ Welcome to AudioGenie! Our mission is to revolutionize the way you experience au
           necessary authority to bind that business to these Terms.
         </Text>
         <Text style={styles.sectionContent}>
-          <Text style={styles.heading}>1.2. Account Information:</Text> 
-1.2. Account Information: Your account integrity is paramount. You are entrusted with the responsibility of safeguarding the confidentiality of your account details, comprising your username and password. It is imperative that you furnish precise, comprehensive, and current information during the registration process. Additionally, you commit to promptly updating any modifications to your account particulars, ensuring the accuracy and relevancy of your account details at all times.
-
-
-
-
-
-
+          <Text style={styles.heading}>1.2. Account Information:</Text>
+          Your account integrity is paramount. You are entrusted with the responsibility of safeguarding the confidentiality of your account details, comprising your username and password. It is imperative that you furnish precise, comprehensive, and current information during the registration process. Additionally, you commit to promptly updating any modifications to your account particulars, ensuring the accuracy and relevancy of your account details at all times.
         </Text>
         <Text style={styles.sectionContent}>
           <Text style={styles.heading}>1.3. Prohibited Conduct:</Text> Maintaining the integrity of the AudioGenie community is paramount. You expressly agree not to employ the App for any unlawful, fraudulent, or unauthorized endeavors. Any activities that may jeopardize the functionality of the App or impede the experience of fellow users are strictly prohibited. Your commitment to fostering a safe and enriching environment within the AudioGenie community is essential.
@@ -59,13 +113,6 @@ Welcome to AudioGenie! Our mission is to revolutionize the way you experience au
         <Text style={styles.sectionTitle}>2. Audio Genie</Text>
         <Text style={styles.sectionContent}>
           <Text style={styles.heading}>2.1. Partners:</Text> AudioGenie serves as a vital intermediary platform, seamlessly connecting users with a diverse array of audio content partners. While we diligently endeavor to provide accurate information, it's important to note that we do not guarantee the availability, quality, or accuracy of the content provided by our partners. AudioGenie assumes no responsibility for any issues that may arise from the creation, production, or delivery of the audio content by our partners.
-
-
-
-
-
-
-
         </Text>
         <Text style={styles.sectionContent}>
           <Text style={styles.heading}>2.2. Subscription Modifications:</Text> Once a subscription is confirmed through the AudioGenie App, it may not be canceled or modified. Should you encounter any concerns or issues with your subscription, we encourage you to directly communicate with our support team for assistance and resolution.
@@ -114,58 +161,5 @@ Welcome to AudioGenie! Our mission is to revolutionize the way you experience au
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#FFFFFF',
-    paddingHorizontal: 20,
-  },
-  backArrowContainer: {
-    marginRight: 16,
-  },
-  headerContainer1: {
-    width: '100%',
-    height: 270,
-    justifyContent: 'flex-end',
-    opacity: 0.8,
-   
-  },
-  headerContainer: {
-    backgroundColor: '#ED6474',
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    width: '100%',
-  },
-  
-  headerText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: 'white',
+export default TermAndCondition;
 
-  },
-  backArrow: {
-    marginRight: 8,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: 'black',
-  },
-  sectionContainer: {
-    padding: 16,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 8,
-  },
-  sectionContent: {
-    fontSize: 16,
-    marginBottom: 8,
-  },
-  heading: {
-    fontWeight: 'bold',
-  },
-});

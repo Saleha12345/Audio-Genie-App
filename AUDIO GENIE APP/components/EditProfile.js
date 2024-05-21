@@ -6,7 +6,7 @@ import axios from 'axios';
 
 const EditProfile = () => {
   const navigation = useNavigation();
-  const { signupDetails, setSignupDetails } = useUser();
+  const { signupDetails, setSignupDetails, theme, fontSize } = useUser();
   const [isEditingName, setIsEditingName] = useState(false);
   const [isEditingEmail, setIsEditingEmail] = useState(false);
   const [isEditingPassword, setIsEditingPassword] = useState(false);
@@ -39,51 +39,40 @@ const EditProfile = () => {
     }
   };
 
-
-  const handleEditName = () => {
-    setIsEditingName(true);
-  };
-
+  const handleEditName = () => setIsEditingName(true);
   const handleSaveName = () => {
     if (username.trim() !== '') {
       setIsEditingName(false);
       setSignupDetails({ ...signupDetails, username });
+      setChangesMade(true);
     } else {
       Alert.alert('Error', 'Please provide a valid name.');
     }
   };
 
-  const handleEditEmail = () => {
-    setIsEditingEmail(true);
-  };
-
+  const handleEditEmail = () => setIsEditingEmail(true);
   const handleSaveEmail = () => {
     if (email.trim() !== '') {
       setIsEditingEmail(false);
       setSignupDetails({ ...signupDetails, email });
+      setChangesMade(true);
     } else {
       Alert.alert('Error', 'Please provide a valid email.');
     }
   };
 
-  const handleEditPassword = () => {
-    setIsEditingPassword(true);
-  };
-
+  const handleEditPassword = () => setIsEditingPassword(true);
   const handleSavePassword = () => {
     if (password.trim() !== '') {
       setIsEditingPassword(false);
       setSignupDetails({ ...signupDetails, password });
+      setChangesMade(true);
     } else {
       Alert.alert('Error', 'Please provide a valid password.');
     }
   };
 
-  const handleEditNewPassword = () => {
-    setIsEditingNewPassword(true);
-   
-  };
-
+  const handleEditNewPassword = () => setIsEditingNewPassword(true);
   const handleSaveNewPassword = () => {
     if (newPassword.trim() !== '') {
       setIsEditingNewPassword(false);
@@ -93,23 +82,32 @@ const EditProfile = () => {
     }
   };
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
+  const toggleNewPasswordVisibility = () => setShowNewPassword(!showNewPassword);
 
-  const toggleNewPasswordVisibility = () => {
-    setShowNewPassword(!showNewPassword);
+  const getTextColor = () => (theme === 'dark' ? '#FFF' : '#000');
+  const getFontSizeValue = () => {
+    switch (fontSize) {
+      case 'small':
+        return 14;
+      case 'medium':
+        return 18;
+      case 'large':
+        return 22;
+      default:
+        return 18;
+    }
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, theme === 'dark' && styles.darkTheme]}>
       <View style={styles.content}>
         <View style={styles.fieldContainer}>
-          <Text style={styles.sectionLabel}>Name</Text>
-          <TouchableOpacity onPress={() => setIsEditingName(true)}>
+          <Text style={[styles.sectionLabel, { color: getTextColor(), fontSize: getFontSizeValue() }]}>Name</Text>
+          <TouchableOpacity onPress={handleEditName}>
             <View style={styles.inputContainer}>
               <TextInput
-                style={styles.input}
+                style={[styles.input, { color: getTextColor(), fontSize: getFontSizeValue() }]}
                 value={username}
                 onChangeText={(value) => {
                   setUsername(value);
@@ -117,17 +115,18 @@ const EditProfile = () => {
                 }}
                 editable={isEditingName}
                 placeholder="Enter your name"
+                placeholderTextColor={theme === 'dark' ? '#ccc' : '#888'}
               />
             </View>
           </TouchableOpacity>
         </View>
 
         <View style={styles.fieldContainer}>
-          <Text style={styles.sectionLabel}>Email</Text>
-          <TouchableOpacity onPress={() => setIsEditingEmail(true)}>
+          <Text style={[styles.sectionLabel, { color: getTextColor(), fontSize: getFontSizeValue() }]}>Email</Text>
+          <TouchableOpacity onPress={handleEditEmail}>
             <View style={styles.inputContainer}>
               <TextInput
-                style={styles.input}
+                style={[styles.input, { color: getTextColor(), fontSize: getFontSizeValue() }]}
                 value={email}
                 onChangeText={(value) => {
                   setEmail(value);
@@ -135,63 +134,62 @@ const EditProfile = () => {
                 }}
                 editable={isEditingEmail}
                 placeholder="Enter your email"
+                placeholderTextColor={theme === 'dark' ? '#ccc' : '#888'}
               />
-              
             </View>
           </TouchableOpacity>
         </View>
 
         <View style={styles.fieldContainer}>
-          <Text style={styles.sectionLabel}>Password</Text>
+          <Text style={[styles.sectionLabel, { color: getTextColor(), fontSize: getFontSizeValue() }]}>Password</Text>
           <TouchableOpacity onPress={handleEditPassword}>
             <View style={styles.inputContainer}>
               <TextInput
-                style={styles.input}
+                style={[styles.input, { color: getTextColor(), fontSize: getFontSizeValue() }]}
                 value={password}
                 onChangeText={setPassword}
                 editable={isEditingPassword}
                 secureTextEntry={!showPassword}
                 placeholder="Enter your password"
+                placeholderTextColor={theme === 'dark' ? '#ccc' : '#888'}
               />
-    
             </View>
           </TouchableOpacity>
         </View>
 
         <View style={styles.fieldContainer}>
-          <Text style={styles.sectionLabel}>New Password</Text>
+          <Text style={[styles.sectionLabel, { color: getTextColor(), fontSize: getFontSizeValue() }]}>New Password</Text>
           <TouchableOpacity onPress={handleEditNewPassword}>
             <View style={styles.inputContainer}>
               <TextInput
-                style={styles.input}
+                style={[styles.input, { color: getTextColor(), fontSize: getFontSizeValue() }]}
                 value={newPassword}
                 onChangeText={setNewPassword}
                 editable={isEditingNewPassword}
                 secureTextEntry={!showNewPassword}
                 placeholder="Enter your new password"
+                placeholderTextColor={theme === 'dark' ? '#ccc' : '#888'}
               />
-              {isEditingNewPassword && (
-                <TouchableOpacity onPress={handleSaveNewPassword}>
-                  {/* <Text style={styles.saveButton}>Save</Text> */}
-                </TouchableOpacity>
-              )}
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={handleSaveChanges} disabled={!changesMade}>
-          <Text style={[styles.saveButton, !changesMade && { opacity: 0.5 }]}>Save Changes</Text>
-        </TouchableOpacity>
-
+          <TouchableOpacity onPress={handleSaveChanges} disabled={!changesMade} style={{backgroundColor:'white', borderRadius:10, width: 200, marginHorizontal:60, marginTop:30}}>
+            <Text style={[styles.saveButton, !changesMade && { opacity: 0.5 }]}>Save Changes</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#ffffff',
     paddingHorizontal: 16,
     paddingTop: 20,
+  },
+  darkTheme: {
+    backgroundColor: '#333',
   },
   content: {
     flex: 1,
@@ -221,7 +219,9 @@ const styles = StyleSheet.create({
     color: '#0040B5',
     fontWeight: 'bold',
     textAlign: 'center',
-    marginTop: 20,
+    marginTop: 10,
+    marginBottom: 10,
+  
   },
 });
 

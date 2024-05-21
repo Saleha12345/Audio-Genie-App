@@ -2,30 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import axios from 'axios';
-
-// Assuming useUser is a custom hook to get and set user details
-import { useUser } from './UserContext'; 
+import { useUser } from './UserContext';
 
 const SubscriptionScreen = () => {
   const [selectedSubscription, setSelectedSubscription] = useState('Basic');
   const [open, setOpen] = useState(false);
   const [currentSubscription, setCurrentSubscription] = useState("");
-  const [newSubscription, setNewSubscription] = useState("");
   const [isCancellationConfirmed, setIsCancellationConfirmed] = useState(false);
-  const { signupDetails, setSignupDetails } = useUser();
+  const { signupDetails, setSignupDetails, theme, fontSize } = useUser();
 
   useEffect(() => {
-    // Fetch current user subscription when component mounts
     fetchCurrentSubscription();
   }, []);
 
   const fetchCurrentSubscription = async () => {
     try {
       const { email } = signupDetails;
-      console.log(email)
-
       const response = await axios.post(
-        "http://10.113.71.69:3001/getsubscription",
+        "http://192.168.100.23:3001/getsubscription",
         { email }
       );
       if (response.status === 200) {
@@ -39,8 +33,7 @@ const SubscriptionScreen = () => {
   const handleUpdatePlan = async () => {
     try {
       const { email } = signupDetails;
-
-      const response = await fetch("http://10.113.71.69:3001/update-plan", {
+      const response = await fetch("http://192.168.100.23:3001/update-plan", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -64,8 +57,7 @@ const SubscriptionScreen = () => {
   const handleCancelSubscription = async () => {
     try {
       const { email } = signupDetails;
-
-      const response = await fetch("http://10.113.71.69:3001/cancel-subscription", {
+      const response = await fetch("http://192.168.100.23:3001/cancel-subscription", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -85,9 +77,25 @@ const SubscriptionScreen = () => {
     }
   };
 
+  const getTextColor = () => (theme === 'dark' ? '#FFF' : '#000');
+  const getFontSizeValue = () => {
+    switch (fontSize) {
+      case 'small':
+        return 14;
+      case 'medium':
+        return 18;
+      case 'large':
+        return 22;
+      default:
+        return 18;
+    }
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Current subscription: {currentSubscription}</Text>
+    <View style={[styles.container, theme === 'dark' && styles.darkTheme]}>
+      <Text style={[styles.header, { color: getTextColor(), fontSize: getFontSizeValue() }]}>
+        Current subscription: {currentSubscription}
+      </Text>
 
       <DropDownPicker
         open={open}
@@ -100,9 +108,9 @@ const SubscriptionScreen = () => {
         value={selectedSubscription}
         setValue={setSelectedSubscription}
         containerStyle={styles.dropdownContainer}
-        style={styles.dropdown}
+        style={[styles.dropdown, { borderColor: theme === 'dark' ? '#666' : '#CCC' }]}
         itemStyle={styles.dropdownItemText}
-        dropDownStyle={{ backgroundColor: '#fafafa' }}
+        dropDownStyle={{ backgroundColor: theme === 'dark' ? '#444' : '#FFF' }}
       />
 
       <TouchableOpacity
@@ -128,6 +136,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     padding: 20,
   },
+  darkTheme: {
+    backgroundColor: '#333',
+  },
   header: {
     fontWeight: 'bold',
     fontSize: 24,
@@ -141,13 +152,11 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     borderWidth: 1,
-    borderColor: '#CCCCCC',
     borderRadius: 5,
     padding: 10,
     marginBottom: 20,
   },
   actionButton: {
-    backgroundColor: '#0040B5',
     paddingVertical: 15,
     borderRadius: 5,
     alignItems: 'center',
