@@ -1,5 +1,4 @@
 import React from 'react';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import { View, Text, StyleSheet, ScrollView, ImageBackground, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useUser } from './UserContext';
@@ -36,8 +35,6 @@ export default function AboutUs() {
         <Text style={[styles.content, { color: getTextColor(), fontSize: getFontSizeValue() }]}>
           Our mission is straightforward: to elevate your audio experience to new heights. Whether you're seeking music, podcasts, audiobooks, or ambient sounds, AudioGenie connects you with a diverse array of audio creators and genres, ensuring that you have access to an extensive range of auditory delights.
         </Text>
-
-        {/* Continue with other text elements using the same approach */}
       </View>
     </ScrollView>
   );

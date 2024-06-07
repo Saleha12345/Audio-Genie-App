@@ -45,7 +45,7 @@ const HomePage = () => {
 
   const calculateFileSize = (content) => {
     const sizeInBytes = content.length * (3 / 4);
-    return sizeInBytes / 1024; // Convert bytes to kilobytes
+    return sizeInBytes / 1024;
   };
 
   const renderItem = ({ item }) => (
@@ -61,7 +61,7 @@ const HomePage = () => {
       <Text style={[styles.title, { color: theme === "dark" ? "#FFF" : "#000", fontSize: fontSize === "small" ? 14 : fontSize === "medium" ? 18 : 22 }]}>
         Welcome to AudioGenie
       </Text>
-      <Carousel 
+      <Carousel
         data={data}
         renderItem={renderItem}
         sliderWidth={Dimensions.get('window').width}

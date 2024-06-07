@@ -8,10 +8,9 @@ app.use(cors());
 app.use(bodyParser.json());
 
 async function dbConnect() {
-  // use mongoose to connect this app to our database on mongoDB using the DB_URL (connection string)
   mongoose
     .connect('mongodb+srv://saleha:saleha1234@cluster0.cftc4dy.mongodb.net/AudioGenie?retryWrites=true&w=majority&appName=Cluster0',
-    
+
       {
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -25,87 +24,84 @@ async function dbConnect() {
       console.log("Unable to connect to MongoDB Atlas!");
       console.error(error);
     });
+}
+dbConnect();
+const router = express.Router();
+const User = require('./models/User');
+
+app.post('/signup', async (req, res) => {
+  try {
+    console.log("I am here");
+    const email = req.body.email;
+    console.log(req.body);
+    const user = await User.findOne({ email });
+    if (user) {
+      return res.status(404).send('User not found');
+    }
+
+    const newUser = new User(req.body);
+    await newUser.save();
+    res.status(201).json({ message: 'User signed up successfully!' });
+  } catch (error) {
+    console.error('Signup error:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
- dbConnect();
-  const router = express.Router();
-  const User = require('./models/User');
-  
-  app.post('/signup', async (req, res) => {
-    try {
-      console.log("I am here");
-      // Create a new user document using the User model
-      const email=req.body.email;
-      console.log(req.body);
-      const user = await User.findOne({ email });
-      if (user) {
-        return res.status(404).send('User not found');
-      }
-      
-      const newUser = new User(req.body);
-      // Save the user document to the database
-      await newUser.save();
-      res.status(201).json({ message: 'User signed up successfully!' });
-    } catch (error) {
-      console.error('Signup error:', error);
-      res.status(500).json({ message: 'Internal server error' });
+});
+
+app.post('/login', async (req, res) => {
+  try {
+    console.log("I am here");
+    const { email, password } = req.body;
+    console.log(req.body);
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
     }
-  });
-
-  // Login endpoint
-  app.post('/login', async (req, res) => {
-    try {
-      console.log("I am here");
-      const { email, password } = req.body;
-      console.log(req.body);
-      const user = await User.findOne({ email });
-      if (!user) {
-        return res.status(404).json({ message: 'User not found' });
+    if (password === user.password) {
+      if (user.status === 'suspended') {
+        return res.status(403).json({ message: 'Your account is suspended. Please contact support for assistance.' });
       }
-      if (password === user.password) {
-        if (user.status === 'suspended') {
-          return res.status(403).json({ message: 'Your account is suspended. Please contact support for assistance.' });
-        }
-        console.log("blallal")
-        return res.status(200).json({ message: 'Login successful', userData: user });
-      } else {
-        return res.status(401).json({ message: 'Invalid email or password' });
-      }
-    } catch (error) {
-      console.error('Error logging in:', error.message);
-      return res.status(500).json({ message: 'Error logging in' });
+      console.log("blallal")
+      return res.status(200).json({ message: 'Login successful', userData: user });
+    } else {
+      return res.status(401).json({ message: 'Invalid email or password' });
     }
-  });
+  } catch (error) {
+    console.error('Error logging in:', error.message);
+    return res.status(500).json({ message: 'Error logging in' });
+  }
+});
 
-  
-  app.post('/update', async (req, res) => {
-    const { username, email, newPassword } = req.body;
 
-    console.log(username);
+app.post('/update', async (req, res) => {
+  const { username, email, newPassword } = req.body;
 
-    try {
-      const user = await User.findOne({ email });
-  
-      if (!user) {
-        return res.status(404).send('User not found');
-      }
-      if (username) {
-        user.username = username;
-      }
-      if (newPassword) {
-        user.password = newPassword;
-      }
+  console.log(username);
 
-      await user.save();
+  try {
+    const user = await User.findOne({ email });
 
-      res.status(200).send('Profile updated successfully');
-    } catch (error) {
-      console.error('Error updating profile:', error);
-      res.status(500).send('Failed to update profile. Please try again.');
+    if (!user) {
+      return res.status(404).send('User not found');
     }
-  });
+    if (username) {
+      user.username = username;
+    }
+    if (newPassword) {
+      user.password = newPassword;
+    }
 
-  const File = require("./models/Files");
-  
+    await user.save();
+
+    res.status(200).send('Profile updated successfully');
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    res.status(500).send('Failed to update profile. Please try again.');
+  }
+});
+
+const File = require("./models/Files");
+
 app.post("/getFiles", async (req, res) => {
   try {
     const { email } = req.body;
@@ -117,7 +113,6 @@ app.post("/getFiles", async (req, res) => {
     const files = await File.find({ email });
 
     if (files.length > 0) {
-      // Convert file content to base64 before sending
       const filesWithBase64 = files.map(file => ({
         ...file.toObject(),
         content: file.content.toString('base64')
@@ -134,7 +129,6 @@ app.post("/getFiles", async (req, res) => {
   }
 });
 function isValidEmail(email) {
-  // Regular expression to check email format
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 }
@@ -159,7 +153,7 @@ app.post('/getsubscription', async (req, res) => {
     const { email } = req.body;
 
     const subscription = await User.findOne({ email });
-    console.log("here is",subscription.plan);
+    console.log("here is", subscription.plan);
 
     if (subscription) {
       res.status(200).json(subscription.plan);
@@ -174,40 +168,40 @@ app.post('/getsubscription', async (req, res) => {
 
 
 app.post('/update-plan', async (req, res) => {
-const { email, newPlan } = req.body;
+  const { email, newPlan } = req.body;
 
-try {
-  const user = await User.findOne({ email });
+  try {
+    const user = await User.findOne({ email });
 
-  if (!user) {
-    return res.status(404).json({ error: 'User not found' });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    user.plan = newPlan;
+    await user.save();
+
+    return res.status(200).json({ message: 'Plan updated successfully', user });
+  } catch (error) {
+    console.error('Error updating plan:', error);
+    return res.status(500).json({ error: 'Internal server error' });
   }
-
-  user.plan = newPlan;
-  await user.save();
-
-  return res.status(200).json({ message: 'Plan updated successfully', user });
-} catch (error) {
-  console.error('Error updating plan:', error);
-  return res.status(500).json({ error: 'Internal server error' });
-}
 });
 
 app.post('/cancel-subscription', async (req, res) => {
-const { email } = req.body;
+  const { email } = req.body;
 
-try {
-  const user = await User.findOneAndUpdate({ email }, { plan: 'None' }, { new: true });
+  try {
+    const user = await User.findOneAndUpdate({ email }, { plan: 'None' }, { new: true });
 
-  if (user) {
-    res.status(200).json({ message: 'Subscription canceled successfully' });
-  } else {
-    res.status(404).json({ error: 'User not found' });
+    if (user) {
+      res.status(200).json({ message: 'Subscription canceled successfully' });
+    } else {
+      res.status(404).json({ error: 'User not found' });
+    }
+  } catch (error) {
+    console.error('Error canceling subscription:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
-} catch (error) {
-  console.error('Error canceling subscription:', error);
-  res.status(500).json({ error: 'Internal server error' });
-}
 });
 
 app.get('/users', async (req, res) => {
@@ -222,10 +216,10 @@ app.get('/users', async (req, res) => {
 });
 app.get('/active-users', async (req, res) => {
   try {
-    const users = await User.find({status : "active"});
+    const users = await User.find({ status: "active" });
     console.log(users);
     res.json(users);
-    
+
   } catch (error) {
     console.error('Error fetching users:', error);
     res.status(500).json({ error: 'An error occurred while fetching users' });
@@ -298,7 +292,7 @@ app.delete('/users/:email', async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
-  
+
 app.put('/users/:email/status/:newStatus', async (req, res) => {
   const { email, newStatus } = req.params;
   try {

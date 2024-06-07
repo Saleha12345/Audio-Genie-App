@@ -1,7 +1,5 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { useUser } from './UserContext';
 
 const SubscriptionPage = ({ navigation }) => {
@@ -20,10 +18,6 @@ const SubscriptionPage = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        {/* <TouchableOpacity onPress={() => {navigation.navigate('Signup')}} style={styles.backButton}>
-          <FontAwesomeIcon icon={faArrowLeft} size={20} color="#0040B5" />
-        </TouchableOpacity> */}
-        {/* <Image source={require('../images/logo.png')} style={styles.logo} /> */}
       </View>
       <Text style={styles.heading}>Select Subscription Plan</Text>
 
@@ -32,9 +26,9 @@ const SubscriptionPage = ({ navigation }) => {
           <Text style={styles.title}>Basic Plan</Text>
           <Text style={styles.price}>$9.99/month</Text>
           <Text style={styles.features}>- 5
-                Audio File Uploads</Text>
+            Audio File Uploads</Text>
           <Text style={styles.features}>- 10
-                Audio Separation Requests</Text>
+            Audio Separation Requests</Text>
           <TouchableOpacity style={styles.button} onPress={() => handleSubscription('Basic', '300')}>
             <Text style={styles.buttonText}>Select Plan</Text>
           </TouchableOpacity>
@@ -45,7 +39,7 @@ const SubscriptionPage = ({ navigation }) => {
           <Text style={styles.price}>$19.99/month</Text>
           <Text style={styles.features}>- Unlimited Audio File Uploads</Text>
           <Text style={styles.features}>-  50
-                Audio Separation Requests per Month</Text>
+            Audio Separation Requests per Month</Text>
           <TouchableOpacity style={styles.button} onPress={() => handleSubscription('Standard', '900')}>
             <Text style={styles.buttonText}>Select Plan</Text>
           </TouchableOpacity>

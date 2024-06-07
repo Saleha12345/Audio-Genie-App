@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-nativ
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faArrowLeft, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
-import { useUser } from './UserContext'; 
+import { useUser } from './UserContext';
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = React.useState('');
@@ -20,7 +20,7 @@ const Login = ({ navigation }) => {
   const handlePasswordChange = (inputPassword) => {
     setPassword(inputPassword);
   };
-  
+
 
   const handleLogin = async (event) => {
     event.preventDefault();

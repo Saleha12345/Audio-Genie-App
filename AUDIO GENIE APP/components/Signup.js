@@ -47,7 +47,6 @@ const Login = ({ navigation }) => {
       setError('Invalid email format');
       return;
     }
-    // If all validations pass, proceed with sign-up
     setSignupDetails({ user, email, password, country });
     navigation.navigate('Pricing');
   };

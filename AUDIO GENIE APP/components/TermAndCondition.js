@@ -83,12 +83,7 @@ import { useUser } from './UserContext';
       <View>
       </View>
 
-      {/* <View style={styles.contentContainer}>
-        <Text style={styles.title}>Terms and Conditions</Text>
-        <Text style={styles.content}>
-          Welcome to AudioGenie! Our mission is to revolutionize the way you experience audio content. These Terms and Conditions ("Terms") delineate the rules and regulations governing your utilization of the AudioGenie mobile application ("App") and the array of services it offers, all provided by AudioGenie Ltd. ("AudioGenie," "we," or "us"). By accessing and using the App, you are expressly agreeing to adhere to these Terms. We strongly urge you to peruse them meticulously prior to engaging with the App.
-        </Text>
-      </View> */}
+
 
       <View style={styles.sectionContainer}>
         

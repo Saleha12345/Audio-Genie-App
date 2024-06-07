@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { View, Text,TouchableOpacity,Button, ScrollView, StyleSheet,Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, Button, ScrollView, StyleSheet, Dimensions } from 'react-native';
 import { Avatar, IconButton, Colors } from 'react-native-paper';
 import { Table, TableWrapper, Row, Rows } from 'react-native-table-component';
 const customColors = {
@@ -91,7 +91,7 @@ const Users = () => {
       </TouchableOpacity>
     </View>
   ]);
-  
+
   return (
     <View style={styles.container}>
       <ScrollView horizontal={true}>
@@ -101,12 +101,12 @@ const Users = () => {
               data={tableHead}
               style={styles.head}
               textStyle={styles.headerText}
-              widthArr={[70, 140, 210, 130, 120]} // Adjust widthArr based on your content
+              widthArr={[70, 140, 210, 130, 120]}
             />
             <Rows
               data={tableData}
               textStyle={styles.text}
-              widthArr={[70, 140, 210, 130, 120]} // Adjust widthArr based on your content
+              widthArr={[70, 140, 210, 130, 120]}
             />
           </Table>
         </View>
@@ -148,8 +148,8 @@ const styles = StyleSheet.create({
   actionContainer: {
     justifyContent: 'center',
     flexDirection: 'column',
-    alignItems: 'center', // Center align items horizontally
-    justifyContent: 'center', // Center align items vertically
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   tableBorder: {
     borderWidth: 1,
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginVertical: 5,
     alignItems: 'center',
-    width: windowWidth * 0.3, // 80% of the window width
+    width: windowWidth * 0.3,
   },
   buttonText: {
     color: '#FFFFFF',

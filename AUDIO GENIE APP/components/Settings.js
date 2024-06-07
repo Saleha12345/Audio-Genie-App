@@ -70,7 +70,7 @@ const Settings = () => {
     selectedItem: {
       backgroundColor: theme === "dark" ? "#666" : "#ddd",
     }
-    
+
   };
 
   return (

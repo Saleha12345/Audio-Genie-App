@@ -3,13 +3,12 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-nativ
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { useUser } from './UserContext';
-import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import HomePage from './HomePage'; // Import your HomePage component
+import HomePage from './HomePage';
 
 const Stack = createStackNavigator();
 
-const PaymentPage = ({ navigation }) => { // <-- Add navigation as a parameter
+const PaymentPage = ({ navigation }) => {
   const { signupDetails } = useUser();
   const { username, email, password, country, plan, price } = signupDetails;
   const [cardHolderName, setCardHolderName] = useState('');
@@ -19,16 +18,13 @@ const PaymentPage = ({ navigation }) => { // <-- Add navigation as a parameter
   const [error, setError] = useState('');
 
   const handlePayment = async (e) => {
-    // Validate card number length
     if (cardNumber.length !== 16) {
       setError('Card number must be 16 digits');
       return;
     }
-
-    // Validate expiry date not being in the past
     const currentDate = new Date();
     const [expiryMonth, expiryYear] = expiryDate.split('/');
-    const expiry = new Date(`20${expiryYear}`, expiryMonth - 1); // Subtract 1 from month since it's zero-based
+    const expiry = new Date(`20${expiryYear}`, expiryMonth - 1);
     if (expiry < currentDate) {
       setError('Expiry date cannot be in the past');
       return;
@@ -62,17 +58,15 @@ const PaymentPage = ({ navigation }) => { // <-- Add navigation as a parameter
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-      // Navigate to HomePage after successful payment
       navigation.navigate('Root');
     } catch (error) {
-      // Handle payment error (display error message, etc.)
       console.error('Payment error:', error);
     }
   };
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => { navigation.navigate('Pricing')}} style={styles.backButton}>
+      <TouchableOpacity onPress={() => { navigation.navigate('Pricing') }} style={styles.backButton}>
         <FontAwesomeIcon icon={faArrowLeft} size={20} color="#0040B5" />
       </TouchableOpacity>
 

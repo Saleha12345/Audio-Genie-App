@@ -34,7 +34,7 @@ const AdminDashboard = () => {
         setUserData(users);
         setUserCount(users.length);
         countSubscriptions(users);
-       
+
       }
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -78,9 +78,9 @@ const AdminDashboard = () => {
     setStandardCount(standard);
     setPremiumCount(premium);
     setSubscriptionData([basic, standard, premium]);
-    
+
   };
-  
+
 
   const fetchMonthlyRegistrations = async () => {
     try {
@@ -175,7 +175,6 @@ const AdminDashboard = () => {
 
   return (
     <ScrollView style={styles.container}>
-      {/* <Text style={styles.header}>Dashboard</Text> */}
       <View style={styles.cardContainer}>
         <View style={styles.card}>
           <Image source={require('./../../images/total-users.png')} style={styles.image} />
@@ -209,7 +208,7 @@ const AdminDashboard = () => {
       <View style={styles.chartContainer}>
         <Text style={styles.chartTitle}>Countries Data</Text>
         <PieChart
-        style={styles.chart}
+          style={styles.chart}
           data={countryChart.datasets[0].data.map((value, index) => ({
             name: countryChart.labels[index],
             population: value,
@@ -253,10 +252,10 @@ const chartConfig = {
   strokeWidth: 2,
   barPercentage: 0.5,
   useShadowColorFromDataset: false,
-  fillShadowGradient: '#FF493B', // THIS
-  fillShadowGradientOpacity: 1, // THIS
+  fillShadowGradient: '#FF493B',
+  fillShadowGradientOpacity: 1,
   decimalPlaces: 0,
-  
+
 };
 
 
@@ -297,9 +296,9 @@ const styles = StyleSheet.create({
   },
   chartContainer: {
     marginBottom: 20,
-    backgroundColor:"white", 
-    borderRadius:10,
-    
+    backgroundColor: "white",
+    borderRadius: 10,
+
   },
   chartTitle: {
     fontSize: 18,
@@ -311,7 +310,7 @@ const styles = StyleSheet.create({
   chart: {
     borderRadius: 10,
     backgroundColor: "white",
-    
+
   },
 });
 
